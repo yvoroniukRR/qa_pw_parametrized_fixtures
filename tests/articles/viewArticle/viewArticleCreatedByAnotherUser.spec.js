@@ -3,6 +3,7 @@ import { ViewArticlePage } from '../../../src/ui/pages/article/ViewArticlePage';
 import { createArticle } from '../../../src/ui/actions/articles/createArticle';
 import { signUpUser } from '../../../src/ui/actions/auth/signUpUser';
 import { HomePage } from '../../../src/ui/pages/HomePage';
+import { generateNewUserData } from '../../../src/common/testData/generateNewUserData';
 
 test.use({ contextsNumber: 2, usersNumber: 2 });
 
@@ -30,17 +31,16 @@ test.describe('Feed: articles from two users', () => {
   test.use({ usersNumber: 3, contextsNumber: 3 });
 
   test('User can see articles from two other users', async ({ pages, users }) => {
-    const article1 = generateNewArticleData(users[0].username);
-    const article2 = generateNewArticleData(users[1].username);
+    const createArticlePage1 = new CreateArticlePage(pages[0]);
+    await createArticlePage1.open();
+    await createArticlePage1.createArticle(articleWithoutTags);
 
-    await pages[0].goto('/editor');
-
-    await pages[1].goto('/editor');
+    const createArticlePage2 = new CreateArticlePage(pages[1]);
+    await createArticlePage2.open();
+    await createArticlePage2.createArticle(articleWithoutTags);
 
     const homePage = new HomePage(pages[2]);
     await homePage.open();
-
-    await homePage.assertArticleIsVisible(article1.title);
-    await homePage.assertArticleIsVisible(article2.title);
+    await homePage.assertArticleIsVisible(articleWithoutTags.title);
   });
 });

@@ -3,6 +3,7 @@ import {
   EMPTY_PASSWORD_MESSAGE,
   EMPTY_EMAIL_MESSAGE
 } from '../../src/ui/constants/authErrorMessages';
+import { generateNewUserData } from '../../src/common/testData/generateNewUserData';
 
 const user = generateNewUserData();
 const testParameters = [

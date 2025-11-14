@@ -13,9 +13,8 @@ let article;
 
 testParameters.forEach(({ tagsNumber, testNameEnding }) => {
     test.describe('Edit article with tags', () => {
-        test.beforeEach(async ({ page, user, homePage, createArticlePage, articleWithOneTag}) => {
-            article = articleWithOneTag;
-
+        test.beforeEach(async ({ page, user, homePage, createArticlePage, logger }) => {
+            article = generateNewArticleData(logger, tagsNumber);
             await signUpUser(page, user);
             await homePage.clickNewArticleLink();
             await createArticle(page, createArticlePage, article);
