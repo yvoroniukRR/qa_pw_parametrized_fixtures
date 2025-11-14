@@ -30,17 +30,31 @@ test('View an article created by another user', async ({
 test.describe('Feed: articles from two users', () => {
   test.use({ usersNumber: 3, contextsNumber: 3 });
 
-  test('User can see articles from two other users', async ({ pages, users }) => {
-    const createArticlePage1 = new CreateArticlePage(pages[0]);
-    await createArticlePage1.open();
-    await createArticlePage1.createArticle(articleWithoutTags);
+  let article1, article2;
+  let user1, user2, user3;
 
-    const createArticlePage2 = new CreateArticlePage(pages[1]);
-    await createArticlePage2.open();
-    await createArticlePage2.createArticle(articleWithoutTags);
+  test.beforeEach(async ({ pages, users, logger }) => {
+    [user1, user2, user3] = users;
 
-    const homePage = new HomePage(pages[2]);
+    // User1 sign up and create article1
+    await signUpUser(pages[0], user1, 1);
+    article1 = generateNewArticleData(logger, 1);
+    await createArticle(pages[0], article1, 1);
+
+    // User2 sign up and create article2
+    await signUpUser(pages[1], user2, 2);
+    article2 = generateNewArticleData(logger, 1);
+    await createArticle(pages[1], article2, 2);
+
+    // User3 sign up (no article)
+    await signUpUser(pages[2], user3, 3);
+  });
+
+  test('User can see articles from two other users', async ({ pages }) => {
+    const homePage = new HomePage(pages[2], 3);
     await homePage.open();
-    await homePage.assertArticleIsVisible(articleWithoutTags.title);
+    // Перевіряємо, що обидві статті видимі у feed
+    await expect(pages[2].getByText(article1.title)).toBeVisible();
+    await expect(pages[2].getByText(article2.title)).toBeVisible();
   });
 });

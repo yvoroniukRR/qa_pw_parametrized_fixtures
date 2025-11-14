@@ -31,7 +31,7 @@ testParameters.forEach(({ tagsNumber, testNameEnding }) => {
             await viewArticlePage.clickEditArticleButton();
 
             await createArticlePage.fillTagsField(article.tags);
-            await editArticlePage.clickUpdateArticleButton();
+            await editArticlePage.clickPublishArticleButton();
 
             await viewArticlePage.assertArticleTagsAreVisible(article.tags);
         })
@@ -39,7 +39,7 @@ testParameters.forEach(({ tagsNumber, testNameEnding }) => {
         test(`User can remove all tags from article with ${testNameEnding}`, async ({
             editArticlePage,
             viewArticlePage,
-            }) => {
+        }) => {
 
             await viewArticlePage.clickEditArticleButton();
 

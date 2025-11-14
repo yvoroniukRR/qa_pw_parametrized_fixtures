@@ -58,4 +58,18 @@ export class ViewArticlePage {
       }
     });
   }
+  
+  async clickEditArticleButton() {
+    await this.step(`Click 'Edit Article' button`, async () => {
+      await this.editArticleButton.click();
+    });
+  }
+
+  async assertArticleTagsAreNotVisible(tags) {
+    await this.step(`Assert the article does not have tags`, async () => {
+      for (let i = 0; i < tags.length; i++) {
+        await expect(this.tagListItem(tags[i])).not.toBeVisible();
+      }
+    });
+  }
 }
